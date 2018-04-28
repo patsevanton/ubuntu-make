@@ -39,10 +39,6 @@ parts:
     plugin: python
     organize:
       lib/python3/dist-packages/umake: lib/python3.5/site-packages/umake
-    #requirements: requirements.txt
-    after: [patches]
-    install: |
-      patch $SNAPCRAFT_PART_INSTALL/usr/lib/python3.5/ctypes/__init__.py $SNAPCRAFT_STAGE/ctypes_init.diff
     build-packages:
       - gettext
       - python3-apt
@@ -73,6 +69,7 @@ parts:
       - python3-yaml
       - python3-requests
       - python3-xdg
+<<<<<<< HEAD
   umake-completion:
     plugin: dump
     source: snap
@@ -125,3 +122,13 @@ parts:
 #          - liblz4-dev
 #          - liblzma-dev
 #          - zlib1g-dev
+=======
+    override-build: |
+        snapcraftctl build
+        patch $SNAPCRAFT_PART_INSTALL/usr/lib/python3.5/ctypes/__init__.py $SNAPCRAFT_STAGE/ctypes_init.diff
+    override-prime: |
+        # This is the last step, let's now compile all our pyc files.
+        snapcraftctl prime
+        ./usr/bin/python3 -m compileall .
+    after: [patches]
+>>>>>>> Update deprecated snapcraft yaml
