@@ -62,7 +62,6 @@ class AndroidCategory(umake.frameworks.BaseCategory):
             with suppress(AttributeError):
                 url = p.group(1)
             p = re.search(r'<td>(\w+)</td>', line)
-            print(p)
             with suppress(AttributeError):
                 # ensure the size can match a md5 or sha1 checksum
                 if len(p.group(1)) > 15:
