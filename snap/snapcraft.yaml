@@ -15,7 +15,7 @@ confinement: classic
 
 apps:
   umake:
-    command: bin/umake
+    command: bin/umake-wrapper
     completer: umake-completion
 
 parts:
@@ -29,6 +29,11 @@ parts:
     source: snap
     stage:
       - umake-completion
+  umake-wrapper:
+    plugin: dump
+    source: snap/
+    organize:
+      umake-wrapper: bin/umake-wrapper
   umake:
     source: .
     plugin: python
@@ -64,60 +69,6 @@ parts:
       - python3-yaml
       - python3-requests
       - python3-xdg
-<<<<<<< HEAD
-  umake-completion:
-    plugin: dump
-    source: snap
-    stage:
-      - umake-completion
-#  apt:
-#      source: https://github.com/Debian/apt
-#      source-type: git
-#      source-tag: 1.2.19
-#      source-depth: 1
-#      plugin: autotools
-#      prepare: |
-#          make startup
-#      build: |
-#          mkdir apt-build
-#          cd apt-build
-#          ../configure
-#          make
-#      install: |
-#          cd apt-build
-#          install -d $SNAPCRAFT_PART_INSTALL/apt
-#          cp -r bin/methods/* $SNAPCRAFT_PART_INSTALL/apt/
-#          cp -r bin/methods/* $SNAPCRAFT_PART_INSTALL/apt/
-#          install bin/apt-key $SNAPCRAFT_PART_INSTALL/apt/
-#          install bin/apt-mark $SNAPCRAFT_PART_INSTALL/apt/
-#          install bin/apt-internal-solver $SNAPCRAFT_PART_INSTALL/apt/
-#          install bin/apt-helper $SNAPCRAFT_PART_INSTALL/apt/
-#          install -d $SNAPCRAFT_PART_INSTALL/usr/lib
-#          install bin/libapt-inst.so.2.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-pkg.so $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-pkg-5.0-0.symver $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-private.so $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-private-0.0-0.symver $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-private.so.0.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-inst.so.2.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-inst.so $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-pkg.so.5.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-inst-2.0-0.symver $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-pkg.so.5.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install bin/libapt-private.so.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-#          install -d $SNAPCRAFT_PART_INSTALL/usr/include
-#          cp -r include/* $SNAPCRAFT_PART_INSTALL/usr/include/
-#      prime:
-#          - -usr/include
-#      build-packages:
-#          - gettext
-#          - libbz2-dev
-#          - libcurl4-gnutls-dev
-#          - libdb-dev
-#          - liblz4-dev
-#          - liblzma-dev
-#          - zlib1g-dev
-=======
     override-build: |
         snapcraftctl build
         patch $SNAPCRAFT_PART_INSTALL/usr/lib/python3.5/ctypes/__init__.py $SNAPCRAFT_STAGE/ctypes_init.diff
@@ -125,53 +76,4 @@ parts:
         # This is the last step, let's now compile all our pyc files.
         snapcraftctl prime
         ./usr/bin/python3 -m compileall .
-<<<<<<< HEAD
     after: [patches]
->>>>>>> Update deprecated snapcraft yaml
-=======
-    after: [patches, apt]
-  apt:
-      source: https://github.com/Debian/apt
-      source-type: git
-      source-tag: 1.2.19
-      source-depth: 1
-      plugin: autotools
-      override-build: |
-          make startup
-          mkdir apt-build
-          cd apt-build
-          ../configure
-          make
-          install -d $SNAPCRAFT_PART_INSTALL/apt
-          cp -r bin/methods/* $SNAPCRAFT_PART_INSTALL/apt/
-          cp -r bin/methods/* $SNAPCRAFT_PART_INSTALL/apt/
-          install bin/apt-key $SNAPCRAFT_PART_INSTALL/apt/
-          install bin/apt-mark $SNAPCRAFT_PART_INSTALL/apt/
-          install bin/apt-internal-solver $SNAPCRAFT_PART_INSTALL/apt/
-          install bin/apt-helper $SNAPCRAFT_PART_INSTALL/apt/
-          install -d $SNAPCRAFT_PART_INSTALL/usr/lib
-          install bin/libapt-inst.so.2.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-pkg.so $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-pkg-5.0-0.symver $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-private.so $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-private-0.0-0.symver $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-private.so.0.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-inst.so.2.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-inst.so $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-pkg.so.5.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-inst-2.0-0.symver $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-pkg.so.5.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install bin/libapt-private.so.0.0 $SNAPCRAFT_PART_INSTALL/usr/lib/
-          install -d $SNAPCRAFT_PART_INSTALL/usr/include
-          cp -r include/* $SNAPCRAFT_PART_INSTALL/usr/include/
-      prime:
-          - -usr/include
-      build-packages:
-          - gettext
-          - libbz2-dev
-          - libcurl4-gnutls-dev
-          - libdb-dev
-          - liblz4-dev
-          - liblzma-dev
-          - zlib1g-dev
->>>>>>> Try to install with requirements
