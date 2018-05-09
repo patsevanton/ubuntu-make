@@ -15,7 +15,7 @@ confinement: classic
 
 apps:
   umake:
-    command: bin/umake-wrapper
+    command: bin/umake
     completer: umake-completion
 
 parts:
