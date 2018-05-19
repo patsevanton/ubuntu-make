@@ -83,10 +83,11 @@ class SwiftLang(umake.frameworks.baseinstaller.BaseInstaller):
             line_content = line.decode()
             (new_sig_url, in_download) = self.parse_download_link(line_content, in_download)
             if str(new_sig_url) > str(sig_url):
-                tmp_release = re.search("ubuntu(.....).tar", new_sig_url).group(1)
-                if tmp_release <= get_current_ubuntu_version():
-                    sig_url = new_sig_url
-
+                # Avoid fetching development snapshots
+                if 'DEVELOPMENT-SNAPSHOT' not in new_sig_url:
+                    tmp_release = re.search("ubuntu(.....).tar", new_sig_url).group(1)
+                    if tmp_release <= get_current_ubuntu_version():
+                        sig_url = new_sig_url
         if not sig_url:
             logger.error("Download page changed its syntax or is not parsable")
             UI.return_main_screen(status_code=1)
